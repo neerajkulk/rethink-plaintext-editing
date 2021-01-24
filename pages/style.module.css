@@ -161,6 +161,15 @@ body {
   justify-content: center;
 }
 
+.center {
+  margin:auto;
+  margin-top:3px;
+  width:90%;
+  font-size: 16px;
+  line-height: 16px;
+  color: var(--color-text-dark-mute);
+}
+
 .editorWindow .empty {
   text-align: center;
   font-size: 16px;
