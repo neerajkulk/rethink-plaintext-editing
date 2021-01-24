@@ -76,7 +76,8 @@ FilesTable.propTypes = {
   setActiveFile: PropTypes.func
 };
 
-function Previewer({ file }) {
+function Previewer({ file, write }) {
+  // Pass in write as props
   const [value, setValue] = useState('');
 
   useEffect(() => {
@@ -88,6 +89,15 @@ function Previewer({ file }) {
   return (
     <div className={css.preview}>
       <div className={css.title}>{path.basename(file.name)}</div>
+      <h3 className={css.title}>Editor</h3>
+      <div className={css.center}>
+        <textarea rows='4' className={css.center} type='text' value={value} onChange={(event) => {
+          setValue(event.target.value) //update text in file
+          write(file) // update Files state with new file
+        }} />
+      </div>
+
+      <h3 className={css.title}>Preview</h3>
       <div className={css.content}>{value}</div>
     </div>
   );
@@ -113,9 +123,10 @@ function PlaintextFilesChallenge() {
   }, []);
 
   const write = file => {
-    console.log('Writing soon... ', file.name);
+    // Update the File state when a we modify a file
+    const new_files = files.filter(f => f.name != file.name)
+    setFiles([...new_files, file])
 
-    // TODO: Write the file to the `files` array
   };
 
   const Editor = activeFile ? REGISTERED_EDITORS[activeFile.type] : null;
@@ -158,7 +169,7 @@ function PlaintextFilesChallenge() {
         {activeFile && (
           <>
             {Editor && <Editor file={activeFile} write={write} />}
-            {!Editor && <Previewer file={activeFile} />}
+            {!Editor && <Previewer file={activeFile} write={write} />}
           </>
         )}
 
